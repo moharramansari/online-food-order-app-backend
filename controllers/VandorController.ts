@@ -74,7 +74,7 @@ export const UpdateVandorService = async (req: Request, res: Response, next: Nex
 
         if (existingVandor !== null) {
             existingVandor.serviceAvailble = !existingVandor.serviceAvailble
-            
+
             const savedResult = await existingVandor.save();
             return res.json(savedResult);
         }
@@ -83,5 +83,16 @@ export const UpdateVandorService = async (req: Request, res: Response, next: Nex
     }
 
     return res.json({"message" : "Vandor information Not Found"})
+}
+
+export const AddFood = async (req: Request, res: Response, next: NextFunction) => { 
+
+    const user = req.user;
+
+    if (user) {
+        
+    }
+
+    res.json({"message" : "Food information not found"})
 }
 
