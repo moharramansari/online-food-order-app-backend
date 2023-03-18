@@ -33,7 +33,7 @@ export const createVandor = async (req: Request, res: Response, next: NextFuncti
         coverImages: []
     })
 
-    res.json({createdVandor})
+    res.json(createdVandor)
 }
 
 export const GetVandors = async (req: Request, res: Response, next: NextFunction) => {
