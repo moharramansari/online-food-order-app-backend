@@ -40,7 +40,8 @@ export const createVandor = async (req: Request, res: Response, next: NextFuncti
         phone: phone,
         rating: 0,
         serviceAvailble: false,
-        coverImages: []
+        coverImages: [],
+        foods : []
     })
 
     res.json(createdVandor)
