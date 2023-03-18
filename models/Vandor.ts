@@ -10,7 +10,7 @@ interface VandorDoc extends Document{
     email: string;
     password: string;
     salt: string;
-    serviceAvailble: string;
+    serviceAvailble: Boolean;
     coverImages: [string];
     rating: number;
     // foods: any;
