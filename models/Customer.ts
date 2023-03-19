@@ -26,7 +26,7 @@ const CustomerSchema = new Schema({
     phone: {type : String, required : true},
     verified:{type : Boolean, required : true},
     otp: { type: Number, required: true },
-    otp_expity : {type : Date, required : true},
+    otp_expiry : {type : Date, required : true},
     lat: {type : Number }, 
     lng: { type: Number },
 },
