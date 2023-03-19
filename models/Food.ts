@@ -1,12 +1,12 @@
 import mongoose, {Schema, Document} from "mongoose";
 
-interface FoodDoc extends Document{
+export interface FoodDoc extends Document{
     vandorId: string;
     name: string;
     description: string;
     category: string;
     foodType: string;
-    readyTime: string;
+    readyTime: number;
     price: number;
     rating: number;
     images: [string];
@@ -36,4 +36,4 @@ const FoodSchema = new Schema({
 
 const Food = mongoose.model<FoodDoc>('food', FoodSchema)
 
-export {Food}
+export  { Food }
