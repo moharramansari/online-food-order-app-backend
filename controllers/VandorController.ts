@@ -4,6 +4,7 @@ import { createFoodInputs } from "../dto/Food.dto";
 import { Food } from "../models/Food";
 import { GenrateSignature, ValidatePassword } from "../utility";
 import { FindVandor } from "./AdminController";
+import { Multer } from "multer";
 
 
 export const VandorLogin = async (req: Request, res: Response, next: NextFunction) => {
@@ -98,13 +99,18 @@ export const AddFood = async (req: Request, res: Response, next: NextFunction) =
         const vandor = await FindVandor(user._id)
 
         if (vandor !== null) {
+
+            const files = req.files as [Express.Multer.File];
+
+            const images = files.map((file: Express.Multer.File) => file.filename);
+
             const createFood = await Food.create({
                 vandorId: vandor._id,
                 name: name,
                 description: description,
                 category: category,
                 foodType: foodType,
-                images: ['mock.jpg'],
+                images: images,
                 readyTime: readyTime,
                 price: price,
                 rating : 0
