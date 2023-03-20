@@ -22,6 +22,18 @@ export class userLoginInputs {
 
 }
 
+export class EditCustomerProfileInputs {
+
+    @Length(3, 16)
+    firstName: string;
+
+     @Length(3, 16)
+    lastName: string;
+
+     @Length(6, 16)
+    address: string;
+}
+
 export interface CustomerPayload{
     _id: string;
     email: string;

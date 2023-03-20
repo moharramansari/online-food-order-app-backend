@@ -1,7 +1,7 @@
 import express, { Request, Response, NextFunction } from 'express';
 import { validate } from 'class-validator'
 import { plainToClass } from 'class-transformer'
-import { CreateCustomerInputs, userLoginInputs } from '../dto/Customer.dto'
+import { CreateCustomerInputs, userLoginInputs, EditCustomerProfileInputs } from '../dto/Customer.dto'
 import { GenrateSalt, GenratePassword, GenerateOtp, onRequestOTP, GenrateSignature, ValidatePassword } from '../utility';
 import { Customer } from '../models/Customer';
 
@@ -167,10 +167,48 @@ export const RequestOtp = async (req: Request, res: Response, next: NextFunction
 
 export const GetCustomerProfile = async (req: Request, res: Response, next: NextFunction) => {
 
+    const customer = req.user;
     
+    if (customer) {
+        
+        const profile = await Customer.findById(customer._id);
+
+        if (profile) {
+            return res.status(200).json(profile)
+        }
+    }
+
+    return res.status(400).json({ message: "Error with fetch profle" })
 
 }
 
 export const EditCustomerProfile = async (req: Request, res: Response, next: NextFunction) => {
-    
+
+    const customer = req.user;
+
+    const profileInputs = plainToClass(EditCustomerProfileInputs, req.body)
+
+    const profileErrors = await validate(profileInputs, { validationError: { target: false } })
+
+    if (profileErrors.length > 0) {
+        return res.status(400).json(profileErrors)
+    }
+
+    const { firstName, lastName, address } = profileInputs;
+
+    if (customer) {
+        
+        const profile = await Customer.findById(customer._id)
+
+        if (profile) {
+            
+            profile.firstName = firstName,
+            profile.lastName = lastName,
+                profile.address = address
+            
+            const result = await profile.save();
+
+            return res.status(200).json(result)
+        }
+    }
 }
