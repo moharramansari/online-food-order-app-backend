@@ -2,7 +2,7 @@ import express, { Request, Response, NextFunction } from 'express';
 import { validate } from 'class-validator'
 import { plainToClass } from 'class-transformer'
 import { CreateCustomerInputs } from '../dto/Customer.dto'
-import { GenrateSalt, GenratePassword, GenerateOtp } from '../utility';
+import { GenrateSalt, GenratePassword, GenerateOtp, onRequestOTP, GenrateSignature } from '../utility';
 import { Customer } from '../models/Customer';
 
 
@@ -22,36 +22,46 @@ export const CustomerSignUp = async (req: Request, res: Response, next: NextFunc
     const salt = await GenrateSalt();
     const userPassword = await GenratePassword(password, salt);
 
-    const { otp, expiry } =   GenerateOtp();
-
-    console.log(otp, expiry)
+    const { otp, expiry } = GenerateOtp();
+    
+    const existingCustomer = await Customer.findOne({ email: email });
+    if (existingCustomer != null) {
+        return res.status(409).json({message: 'An user exist with the provided email user '})
+    }
     
     const result = await Customer.create({
         email: email,
-        password: password,
+        password: userPassword,
         salt: salt, 
         phone: phone,
         otp: otp,
         otp_expiry: expiry,
-        firstName: 'skldngakldsgkl',
-        lastName: 'hsdgklals;dhkl',
-        address: 'klasdglkas',
+        firstName: 'Moharram',
+        lastName: 'Ansari',
+        address: 'Lucknow',
         verified: false,
         lat: 0,
         lng: 0
     })
 
     if (result) {
-           res.json({result})
-    }
 
-        
         //send otp to the customer
+        await onRequestOTP(otp, phone)
 
-        //generate the signature 
+        //generate the signature
+
+        const signature = GenrateSignature({
+            _id: result._id,
+            email: result.email,
+            verified : result.verified
+        })
 
         //send result to the client
-    
+        return res.status(201).json({signature : signature, verified: result.verified, email: result.email})
+    }
+
+    return res.status(201).json({message : 'Error with signup'})
 
 }
 

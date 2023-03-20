@@ -14,4 +14,19 @@ export const GenerateOtp = () => {
     return { otp, expiry}
 }
 
+export const onRequestOTP = async (otp: number, toPhoneNumber: string) => {
+    const accoundSid = '';
+    const authToken = '';
+
+    const client = require('twilio')(accoundSid, authToken)
+
+    const response = await client.messages.create({
+        body: `Your OTP is ${otp}`,
+        from: '',
+        to: `+91${toPhoneNumber}`
+    })
+
+    return response;
+}
+
 //Payment notification or emails
