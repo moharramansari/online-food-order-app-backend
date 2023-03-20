@@ -2,7 +2,7 @@ import express, { Request, Response, NextFunction } from 'express';
 import { validate } from 'class-validator'
 import { plainToClass } from 'class-transformer'
 import { CreateCustomerInputs, userLoginInputs, EditCustomerProfileInputs } from '../dto/Customer.dto'
-import { GenrateSalt, GenratePassword, GenerateOtp, onRequestOTP, GenrateSignature, ValidatePassword } from '../utility';
+import { GenrateSalt, GenratePassword, GenerateOtp, GenrateSignature, ValidatePassword } from '../utility';
 import { Customer } from '../models/Customer';
 
 
@@ -212,3 +212,5 @@ export const EditCustomerProfile = async (req: Request, res: Response, next: Nex
         }
     }
 }
+
+

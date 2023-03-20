@@ -33,7 +33,12 @@ router.get('/profile', GetCustomerProfile)
 router.patch('/profile', EditCustomerProfile)
 
 //Cart
-//Order
+
 //Payment
+
+//Order
+router.post('/create-order')
+router.get('/orders')
+router.get('/order/:id')
 
 export { router as CustomerRoute };
