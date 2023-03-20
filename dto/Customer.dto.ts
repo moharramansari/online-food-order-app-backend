@@ -12,6 +12,16 @@ export class CreateCustomerInputs {
     password: string;
 }
 
+export class userLoginInputs {
+
+    @IsEmail()
+    email: string;
+
+    @Length(7, 12)
+    password: string;
+
+}
+
 export interface CustomerPayload{
     _id: string;
     email: string;

@@ -1,8 +1,8 @@
 import express, { Request, Response, NextFunction } from 'express';
 import { validate } from 'class-validator'
 import { plainToClass } from 'class-transformer'
-import { CreateCustomerInputs } from '../dto/Customer.dto'
-import { GenrateSalt, GenratePassword, GenerateOtp, onRequestOTP, GenrateSignature } from '../utility';
+import { CreateCustomerInputs, userLoginInputs } from '../dto/Customer.dto'
+import { GenrateSalt, GenratePassword, GenerateOtp, onRequestOTP, GenrateSignature, ValidatePassword } from '../utility';
 import { Customer } from '../models/Customer';
 
 
@@ -67,8 +67,43 @@ export const CustomerSignUp = async (req: Request, res: Response, next: NextFunc
 
 
 export const CustomerLogIn = async (req: Request, res: Response, next: NextFunction) => {
-
     
+    const loginInputs = plainToClass(userLoginInputs, req.body);
+
+    const loginErrors = await validate(loginInputs, { validationError: { target: true } })
+
+    if (loginErrors.length > 0) {
+        return res.status(400).json(loginErrors);
+    }
+
+    const { email, password } = loginInputs;
+
+    const customer = await Customer.findOne({ email: email })
+
+    if (customer) {
+        
+        const validation = await ValidatePassword(password, customer.password, customer.salt);
+
+        if (validation) {
+            
+            //generate the signature
+            const signature = GenrateSignature({
+                _id: customer._id,
+                email: customer.email,
+                verified: customer.verified
+            })
+
+             //send result to the client
+            return res.status(201).json({
+                signature: signature,
+                verified: customer.verified,
+                email: customer.email
+            })
+        }
+    }
+
+   return res.status(404).json({message : 'Login error'})
+
 }
 
 export const CustomerVerify = async (req: Request, res: Response, next: NextFunction) => {
@@ -102,7 +137,7 @@ export const CustomerVerify = async (req: Request, res: Response, next: NextFunc
             }
         }
     }
-        return res.status(201).json({message : 'Error with OTP Validation '})
+        return res.status(400).json({message : 'Error with OTP Validation '})
 }
 
 export const RequestOtp = async (req: Request, res: Response, next: NextFunction) => {
