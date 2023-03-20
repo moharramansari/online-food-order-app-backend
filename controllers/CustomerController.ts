@@ -47,7 +47,7 @@ export const CustomerSignUp = async (req: Request, res: Response, next: NextFunc
     if (result) {
 
         //send otp to the customer
-        await onRequestOTP(otp, phone)
+        // await onRequestOTP(otp, phone)
 
         //generate the signature
 
@@ -72,8 +72,37 @@ export const CustomerLogIn = async (req: Request, res: Response, next: NextFunct
 }
 
 export const CustomerVerify = async (req: Request, res: Response, next: NextFunction) => {
-    
 
+    const { otp } = req.body;
+    const customer = req.user;
+
+    if (customer) {
+        
+        const profile = await Customer.findById(customer._id);
+
+        if (profile) {
+            
+            if (profile.otp === parseInt(otp) && profile.otp_expiry >= new Date()) {
+                profile.verified = true
+
+                const updateCustomerResponse = await profile.save();
+
+                //generate the signature
+                const signature = GenrateSignature({
+                    _id: updateCustomerResponse._id,
+                    email: updateCustomerResponse.email,
+                    verified: updateCustomerResponse.verified
+                });
+
+                return res.status(200).json({
+                    signature: signature,
+                    verified: updateCustomerResponse.verified,
+                    email: updateCustomerResponse.email
+                });
+            }
+        }
+    }
+        return res.status(201).json({message : 'Error with OTP Validation '})
 }
 
 export const RequestOtp = async (req: Request, res: Response, next: NextFunction) => {
