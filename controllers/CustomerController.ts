@@ -238,6 +238,7 @@ export const CreateOrder = async (req: Request, res: Response, next: NextFunctio
         
         //Calculate order amount
         const foods = await Food.find().where('_id').in(cart.map(item => item._id)).exec();
+        console.log(foods)
 
         foods.map(food => {
             
@@ -249,6 +250,8 @@ export const CreateOrder = async (req: Request, res: Response, next: NextFunctio
                 }
             })
         })
+
+        console.log('+++++cart items', cartItems)
 
     //Create Order with Item description 
         if (cartItems) {
@@ -280,12 +283,30 @@ export const CreateOrder = async (req: Request, res: Response, next: NextFunctio
 }
 
 export const GetOrders = async (req: Request, res: Response, next: NextFunction) => {
- 
-    
+
+    const customer = req.user;
+
+    if (customer) {
+        const profile = await Customer.findById(customer._id).populate("orders");
+
+        if (profile) {
+            return res.status(200).json(profile.orders)
+        }
+    }
+
+    // return res.status()
 }
 
 export const GetOrderById = async (req: Request, res: Response, next: NextFunction) => {
-    
+
+    const orderId = req.params.id;
+
+    if (orderId) {
+        
+        const order = await Order.findById(orderId).populate('items.food')
+
+        return res.status(200).json(order);
+    }
 }
 
 
