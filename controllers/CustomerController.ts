@@ -216,6 +216,42 @@ export const EditCustomerProfile = async (req: Request, res: Response, next: Nex
     }
 }
 
+/** -------------------- Cart Section ---------------------- **/
+
+export const addToCart = async (req: Request, res: Response, next: NextFunction) => {
+
+    const customer = req.user;
+
+    if (customer) {
+
+        const profile = await Customer.findById(customer._id)
+
+        let cartItems = Array();
+
+        const {_id, unit} = <OrderInputs>req.body;
+
+        const food = await Food.findById(_id);
+
+        if (food) {
+            if (profile != null) {
+            //check for the cart items
+                // cartItems = profile.cart
+            }
+        } else {
+            return res.status(400).json({ message: 'Unable to create cart' })
+        }
+    }
+}
+
+export const GetCart = async (req: Request, res: Response, next: NextFunction) => {
+
+}
+
+export const DeleteCart = async (req: Request, res: Response, next: NextFunction) => {
+
+}
+
+/** ------------------ Order Section -------------------- **/
 
 export const CreateOrder = async (req: Request, res: Response, next: NextFunction) => {
     

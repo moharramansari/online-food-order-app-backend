@@ -1,5 +1,5 @@
 import express, {Request, Response, NextFunction} from 'express'
-import { CreateOrder, CustomerLogIn, CustomerSignUp, CustomerVerify, EditCustomerProfile, GetCustomerProfile, GetOrderById, GetOrders, RequestOtp } from '../controllers/CustomerController';
+import { addToCart, CreateOrder, CustomerLogIn, CustomerSignUp, CustomerVerify, DeleteCart, EditCustomerProfile, GetCart, GetCustomerProfile, GetOrderById, GetOrders, RequestOtp } from '../controllers/CustomerController';
 import { Authenticate } from '../middlewares';
 
 
@@ -33,6 +33,9 @@ router.get('/profile', GetCustomerProfile)
 router.patch('/profile', EditCustomerProfile)
 
 //Cart
+router.post('/cart', addToCart)
+router.get('/cart', GetCart)
+router.delete('/cart/:id', DeleteCart)
 
 //Payment
 
