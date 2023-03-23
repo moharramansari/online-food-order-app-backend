@@ -219,7 +219,7 @@ export const EditCustomerProfile = async (req: Request, res: Response, next: Nex
 /** -------------------- Cart Section ---------------------- **/
 
 export const addToCart = async (req: Request, res: Response, next: NextFunction) => {
-
+    
     const customer = req.user;
 
     if (customer) {
@@ -232,14 +232,7 @@ export const addToCart = async (req: Request, res: Response, next: NextFunction)
 
         const food = await Food.findById(_id);
 
-        if (food) {
-            if (profile != null) {
-            //check for the cart items
-                // cartItems = profile.cart
-            }
-        } else {
-            return res.status(400).json({ message: 'Unable to create cart' })
-        }
+        
     }
 }
 
