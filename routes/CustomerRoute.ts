@@ -35,13 +35,10 @@ router.patch('/profile', EditCustomerProfile)
 //Cart
 router.post('/cart', addToCart)
 router.get('/cart', GetCart)
-router.delete('/cart/:id', DeleteCart)
+router.delete('/cart', DeleteCart)
 
 //Payment
 
-//Order
-router.post('/create-order', CreateOrder)
-router.get('/orders', GetOrders)
-router.get('/order/:id', GetOrderById)
+
 
 export { router as CustomerRoute };
