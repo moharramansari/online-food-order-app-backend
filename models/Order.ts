@@ -8,7 +8,7 @@ export interface OrderDoc extends Document{
     orderDate: Date;
     paidThrough: string; //COD, Credit Card, Wallet
     paymentResponse: string; //{status: true, response: some bank response}
-    orderStatus: string; //determine the current status //waiting //preparing //onway //delivered // cancelled // failed 
+    orderStatus: string; // To determine the current status // waiting // ACCEPT //onway //REJECT // UNDER-PROCESS // READY  
     remarks: string; // resaon for cancel the order
     deliveryId: string; 
     appliedOffers: boolean;

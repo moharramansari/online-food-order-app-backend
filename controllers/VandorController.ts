@@ -5,7 +5,7 @@ import { Food } from "../models/Food";
 import { GenrateSignature, ValidatePassword } from "../utility";
 import { FindVandor } from "./AdminController";
 import { Multer } from "multer";
-import { Order } from "../models/Order";
+import { Order, OrderDoc } from "../models/Order";
 
 
 export const VandorLogin = async (req: Request, res: Response, next: NextFunction) => {
@@ -180,7 +180,3 @@ export const GetOrderDetails = async (req: Request, res: Response, next: NextFun
 
 }
 
-export const ProcessOrder = async (req: Request, res: Response, next: NextFunction) => {
-
-    
-}
