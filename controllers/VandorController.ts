@@ -5,6 +5,7 @@ import { Food } from "../models/Food";
 import { GenrateSignature, ValidatePassword } from "../utility";
 import { FindVandor } from "./AdminController";
 import { Multer } from "multer";
+import { Order } from "../models/Order";
 
 
 export const VandorLogin = async (req: Request, res: Response, next: NextFunction) => {
@@ -144,3 +145,42 @@ export const GetFoods = async (req: Request, res: Response, next: NextFunction) 
 
  }
 
+
+export const GetCurrentOrders = async (req: Request, res: Response, next: NextFunction) => {
+
+    const user = req.user;
+
+    if (user) {
+
+        const orders = await Order.find({ vandorId: user._id }).populate('items.food');
+
+        if (orders != null) {
+            return res.status(200).json(orders);
+        }
+    }
+
+     return res.json({"message" : "Order information Not found"})
+}
+
+
+export const GetOrderDetails = async (req: Request, res: Response, next: NextFunction) => {
+
+    const orderID = req.params.id;
+    
+    if (orderID) {
+
+        const order = await Order.findById(orderID).populate('items.food');
+
+        if (order != null) {
+            return res.status(200).json(order);
+        }
+    }
+
+     return res.json({"message" : "Order information Not found"})
+
+}
+
+export const ProcessOrder = async (req: Request, res: Response, next: NextFunction) => {
+
+    
+}
