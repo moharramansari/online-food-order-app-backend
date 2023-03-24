@@ -367,11 +367,12 @@ export const CreateOrder = async (req: Request, res: Response, next: NextFunctio
 
             if (currentOrder) {
                 
-                // profile.cart = [] as any;
-                profile?.orders.push(currentOrder);
-                const profileResponse = await profile?.save();
-
-                return res.status(200).json(profileResponse)
+                if (profile != null) {
+                    profile.cart = [] as any;
+                    const cartResult = await profile.save();
+                    
+                    return res.status(200).json(cartResult);
+                }
             }
         }
     
