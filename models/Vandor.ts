@@ -30,7 +30,7 @@ const VandorSchema = new Schema({
     coverImages: {type:[String]},
     rating: { type: Number },
     foods: [{
-        type: mongoose.SchemaTypes.ObjectId,
+        type: Schema.Types.ObjectId,
         ref: 'food'
     }]
 },

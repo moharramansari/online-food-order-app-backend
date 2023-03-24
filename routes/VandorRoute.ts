@@ -33,7 +33,7 @@ router.get('/foods', images, GetFoods)
 
 //Orders
 router.get('/orders', GetCurrentOrders);
-router.get('/order/:id', ProcessOrder)
+router.put('/order/:id/process', ProcessOrder)
 router.get('/orders', GetOrderDetails)
 
 router.get('/', (req: Request, res: Response, next: NextFunction) => {

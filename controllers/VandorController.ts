@@ -5,7 +5,7 @@ import { Food } from "../models/Food";
 import { GenrateSignature, ValidatePassword } from "../utility";
 import { FindVandor } from "./AdminController";
 import { Multer } from "multer";
-import { Order, OrderDoc } from "../models/Order";
+import { Order }  from "../models/Order";
 
 
 export const VandorLogin = async (req: Request, res: Response, next: NextFunction) => {
@@ -181,7 +181,35 @@ export const GetOrderDetails = async (req: Request, res: Response, next: NextFun
 }
 
 
+export const ProcessOrder = async (req: Request, res: Response, next: NextFunction) => { 
 
+    const orderId = req.params.id;
+
+    const { status, remarks, time } = req.body; //ACCEPT // REJECT // UNDER-PROCESS //READY
+
+    if (orderId) {
+        
+        const order = await Order.findById(orderId).populate('items.food')
+
+        if (order != null) {
+            order.orderStatus = status;
+            order.remarks = remarks;
+
+            if (time) {
+                order.readyTime = time
+            }
+        }
+        
+        const orderResult = await order?.save();
+
+        if (orderResult != null) {
+            return res.status(200).json(orderResult)
+        }
+    }
+
+      return res.json({"message" : "Unable to process order"});
+
+}
 
 
 
