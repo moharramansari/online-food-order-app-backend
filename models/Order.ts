@@ -1,19 +1,19 @@
 import mongoose, {Schema, Document} from "mongoose";
 
 export interface OrderDoc extends Document{
-    orderID: string; //5948764
-    vandorId: string;
-    items: [any];
-    totalAmount: {type : Number, required : true},
-    orderDate: Date;
-    paidThrough: string; //COD, Credit Card, Wallet
-    paymentResponse: string; //{status: true, response: some bank response}
-    orderStatus: string;// To determine the current status // waiting // ACCEPT //onway //REJECT // UNDER-PROCESS // READY  
-    remarks: string; // resaon for cancel the order
-    deliveryId: string; 
-    appliedOffers: boolean;
-    offerId: string;
-    readyTime: number; //max 60 minutes
+    orderID: string, //5948764
+    vandorId: string,
+    items: [any], //{Food , unit}
+    totalAmount: number, //600.00
+    orderDate: Date, //Date
+    paidThrough: string,  // COD // CARD // Net Banking // Wallet
+    paymentResponse: string,  //{Long response object for charge back scenario}
+    orderStatus: string,// To determine the current status // waiting // ACCEPT //onway //REJECT // UNDER-PROCESS // READY  
+    remarks: string, // resaon for cancel the order
+    deliveryId: string, 
+    appliedOffers: boolean,
+    offerId: string,
+    readyTime: number //max 60 minutes
 }
 
 const OrderSchema = new Schema({
