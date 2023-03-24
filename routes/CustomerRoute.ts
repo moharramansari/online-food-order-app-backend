@@ -32,6 +32,13 @@ router.get('/profile', GetCustomerProfile)
 
 router.patch('/profile', EditCustomerProfile)
 
+
+//Order
+
+router.post('/order', CreateOrder)
+router.get('/orders', GetOrders)
+router.get('/order/:id', GetOrderById)
+
 //Cart
 router.post('/cart', addToCart)
 router.get('/cart', GetCart)
