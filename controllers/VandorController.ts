@@ -211,7 +211,21 @@ export const ProcessOrder = async (req: Request, res: Response, next: NextFuncti
 
 }
 
+export const GetOffers = async (req: Request, res: Response, next: NextFunction) => { 
 
+
+}
+
+
+export const AddOffer = async (req: Request, res: Response, next: NextFunction) => { 
+
+    
+}
+
+export const EditOffer = async (req: Request, res: Response, next: NextFunction) => { 
+
+    
+}
 
 
 
