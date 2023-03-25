@@ -1,11 +1,12 @@
 import { Request, Response, NextFunction } from "express";
-import { EditVandorInputs, VandorLoginInputs } from "../dto";
+import { CreateOfferInputs, EditVandorInputs, VandorLoginInputs } from "../dto";
 import { createFoodInputs } from "../dto/Food.dto";
 import { Food } from "../models/Food";
 import { GenrateSignature, ValidatePassword } from "../utility";
 import { FindVandor } from "./AdminController";
 import { Multer } from "multer";
 import { Order }  from "../models/Order";
+import { Offer } from "../models/Offer";
 
 
 export const VandorLogin = async (req: Request, res: Response, next: NextFunction) => {
@@ -213,19 +214,123 @@ export const ProcessOrder = async (req: Request, res: Response, next: NextFuncti
 
 export const GetOffers = async (req: Request, res: Response, next: NextFunction) => { 
 
+    const user = req.user;
 
+    if (user) {
+
+        let currentOffers = Array();
+
+        const offers = await Offer.find().populate('vendors');
+
+        if (offers) {
+            offers.map(item => {
+                if (item.vendors) {
+                    item.vendors.map(vendor => {
+                        if (vendor._id.toString() === user._id) {
+                            currentOffers.push(item);
+                        }
+                    })
+                }
+
+                if (item.offerType === 'GENERIC') {
+                    currentOffers.push(item)
+                }
+
+            })
+        } 
+
+        return res.status(200).json(currentOffers)
+    }
+
+    return res.json({"message" : "Offer not available!"});
 }
 
 
 export const AddOffer = async (req: Request, res: Response, next: NextFunction) => { 
 
-    
+    const user = req.user
+
+    if (user) {
+        
+        const { title, description, offerType, offerAmount, pincode,
+            promoCode, promoType, startValidity, endValidity, bank, bins, minValue, isActive } = <CreateOfferInputs>req.body;
+        
+        const vendor = await FindVandor(user._id);
+
+        if (vendor) {
+            
+            const offer = await Offer.create({
+                title,
+                description,
+                offerType,
+                offerAmount,
+                pincode,
+                promoCode,
+                promoType,
+                startValidity,
+                endValidity,
+                bank,
+                bins,
+                minValue,
+                isActive,
+                vendors: [vendor]
+            })
+
+            console.log(offer);
+            return res.status(201).json(offer)
+        }
+
+        return res.json({"message" : "Unable to Add a offer!"});
+    }
 }
 
 export const EditOffer = async (req: Request, res: Response, next: NextFunction) => { 
 
+    const user = req.user
+
+    const offerId = req.params.id;
+
+    if (offerId) {
+        
+            if (user) {
+        
+        const { title, description, offerType, offerAmount, pincode,
+            promoCode, promoType, startValidity, endValidity, bank, bins, minValue, isActive } = <CreateOfferInputs>req.body;
+        
+                const currentOffers = await Offer.findById(offerId);
+
+                if (currentOffers) {
+                    const vendor = await FindVandor(user._id);
+
+                    if (vendor) {
+                        currentOffers.title = title;
+                        currentOffers.description = description;
+                        currentOffers.offerType = offerType;
+                        currentOffers.offerAmount = offerAmount;
+                        currentOffers.pincode = pincode;
+                        currentOffers.promoCode = promoCode;
+                        currentOffers.promoType = promoType;
+                        currentOffers.startValidity = startValidity;
+                        currentOffers.endValidity = endValidity;
+                        currentOffers.bank = bank;
+                        currentOffers.bins = bins;
+                        currentOffers.minValue = minValue;
+                        currentOffers.isActive = isActive;
+                    }
+                    
+                    const result = await currentOffers.save()
+                    return res.status(200).json(result)
+                }
+                
+                }
+    }
+
+    return res.json({ "message": "Unable to Add a offer!" });
+    }
     
-}
+    
+
+
 
 
 

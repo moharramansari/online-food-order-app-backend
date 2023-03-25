@@ -2,7 +2,7 @@ import mongoose, {Schema, Document} from "mongoose";
 
 export interface OfferDoc extends Document{
 
-    offerType: [any], // VEDNDOR // GENERIC
+    offerType: string, // VEDNDOR // GENERIC
     vendors: [any], // ['76796788DSFD]
     title: string,  // INR 200 off on week days
     description: string, // Any description with term and condition
@@ -24,7 +24,7 @@ const OfferSchema = new Schema({
     offerType: { type: String, required: true },
     vendors: [
         {
-            type : Schema.Types.ObjectId, ref : 'vendor'
+            type : Schema.Types.ObjectId, ref : 'vandor'
         }
     ],
     title: { type: String, required: true },
