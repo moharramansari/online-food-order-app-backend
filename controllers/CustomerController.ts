@@ -408,6 +408,8 @@ export const GetOrderById = async (req: Request, res: Response, next: NextFuncti
 
         return res.status(200).json(order);
     }
+
+    return res.status(400).json({ message: 'Order Not Found!' })
 }
 
 
