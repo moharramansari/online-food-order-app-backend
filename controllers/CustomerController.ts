@@ -6,6 +6,7 @@ import { GenrateSalt, GenratePassword, GenerateOtp, GenrateSignature, ValidatePa
 import { Customer } from '../models/Customer';
 import { Food } from '../models';
 import { Order } from '../models/Order';
+import { Offer } from '../models/Offer';
 
 
 
@@ -411,5 +412,31 @@ export const GetOrderById = async (req: Request, res: Response, next: NextFuncti
 
     return res.status(400).json({ message: 'Order Not Found!' })
 }
+
+export const VerifyOffer = async (req: Request, res: Response, next: NextFunction) => { 
+
+    const offerId = req.params.id;
+
+    const customer = req.user;
+
+    if (customer) {
+
+        const appliedOffer = await Offer.findById(offerId)
+
+        if (appliedOffer) {
+            
+            if (appliedOffer.promoType == "USER") {
+                
+                //only can apply once per user
+            } else {
+                if (appliedOffer.isActive) {
+                    return res.status(200).json({ message: 'Offer is valid ', offer: appliedOffer });
+                }
+            }
+        }
+    }
+}
+
+
 
 
