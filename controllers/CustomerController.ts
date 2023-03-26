@@ -395,7 +395,7 @@ export const GetOrders = async (req: Request, res: Response, next: NextFunction)
         }
     }
 
-    // return res.status()
+     return res.status(400).json({ message: 'No Order Found!' })
 }
 
 export const GetOrderById = async (req: Request, res: Response, next: NextFunction) => {
