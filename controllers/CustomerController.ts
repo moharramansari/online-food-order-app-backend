@@ -322,6 +322,7 @@ export const CreateOrder = async (req: Request, res: Response, next: NextFunctio
         const cart = <[OrderInputs]>req.body; //[ { id : XX, unit : XX }]
 
         let cartItems = Array();
+        console.log('cart items in the array ', cartItems)
 
         let netAmount = 0.0;
 
@@ -329,7 +330,7 @@ export const CreateOrder = async (req: Request, res: Response, next: NextFunctio
         
         //Calculate order amount
         const foods = await Food.find().where('_id').in(cart.map(item => item._id)).exec();
-        console.log(foods)
+        console.log('Foods in the foods',foods);
 
         foods.map(food => {
             
@@ -338,7 +339,7 @@ export const CreateOrder = async (req: Request, res: Response, next: NextFunctio
                 if (food._id == _id) {
                     vandorId = food.vandorId;
                     netAmount += (food.price * unit);
-                    cartItems.push({ food, unit })
+                   cartItems.push({ food, unit }) // unit 1 and 2 i,e 
                 }
             })
         })
