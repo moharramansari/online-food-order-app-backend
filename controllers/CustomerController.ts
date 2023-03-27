@@ -4,7 +4,7 @@ import { plainToClass } from 'class-transformer'
 import { CreateCustomerInputs, userLoginInputs, EditCustomerProfileInputs, OrderInputs } from '../dto/Customer.dto'
 import { GenrateSalt, GenratePassword, GenerateOtp, GenrateSignature, ValidatePassword } from '../utility';
 import { Customer } from '../models/Customer';
-import { Food } from '../models';
+import { Food, Transaction } from '../models';
 import { Order } from '../models/Order';
 import { Offer } from '../models/Offer';
 
@@ -436,6 +436,46 @@ export const VerifyOffer = async (req: Request, res: Response, next: NextFunctio
         }
     }
 }
+
+export const CreatePayment = async (req: Request, res: Response, next: NextFunction) => {
+
+    const customer = req.user;
+
+    const { amount, paymentMode, offerId } = req.body;
+
+    let payableAmount = Number(amount);
+
+    if (offerId) {
+
+        const appliedOffer = await Offer.findById(offerId);
+
+        if (appliedOffer) {
+            if (appliedOffer.isActive) {
+                payableAmount = (payableAmount - appliedOffer.offerAmount)
+            }
+        }
+    }
+
+    // Perform payment gateway Charge API call
+    
+
+    //Create record on transaction
+    const transaction = await Transaction.create({
+        customer: customer?._id,
+        vendorId: '',
+        orderId: '',
+        orderValue: payableAmount,
+        offerUsed: offerId || 'NA',
+        status: 'OPEN',
+        paymentMode: paymentMode,
+        paymentResponse : 'Payment is cash on delivery'
+    })
+
+
+    //return transaction ID
+    return res.status(200).json(transaction);
+
+ }
 
 
 
