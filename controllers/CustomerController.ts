@@ -312,6 +312,8 @@ export const CreateOrder = async (req: Request, res: Response, next: NextFunctio
     //grab current login customer
     const customer = req.user;
 
+    const { txnId, amount, items } = <OrderInputs>req.body;
+
     if (customer) {
 
         //create an order ID

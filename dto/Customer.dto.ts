@@ -40,9 +40,15 @@ export interface CustomerPayload{
     verified : boolean
 }
 
-export class OrderInputs {
-
+export class cartItems {
     _id: string;
 
     unit: number;
+}
+export class OrderInputs {
+
+    txnId: string;
+    amount: string;
+    items: [cartItems];
+    
 }
