@@ -311,7 +311,7 @@ const validateTransaction = async (txnId: string) => {
     
     const currentTransaction = await Transaction.findById(txnId);
     console.log("Current transaction", currentTransaction);
-    if (currentTransaction) {
+    if (currentTransaction != null) {
         if (currentTransaction.status.toLowerCase() !== "failed") {
             return { status: true, currentTransaction }
         }
@@ -330,6 +330,7 @@ export const CreateOrder = async (req: Request, res: Response, next: NextFunctio
 
         //validate the transaction 
         const { status, currentTransaction } = await validateTransaction(txnId);
+        console.log("Current transaction details", currentTransaction)
         
         if (!status) {
             return res.status(404).json({ message: "Error with create order! " });
@@ -398,6 +399,12 @@ export const CreateOrder = async (req: Request, res: Response, next: NextFunctio
                     profile.orders.push(currentOrder)
                 }
             }
+
+            // if (currentTransaction) {
+            //     currentTransaction?.vendorId = vendorId;
+            //     currentTransaction?.orderId = orderId;
+            //     currentTransaction?.status = 'CONFIRMED';
+            // }
         }
     
     //Finally update orders to user account

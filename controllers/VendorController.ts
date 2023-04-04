@@ -4,9 +4,9 @@ import { createFoodInputs } from "../dto/Food.dto";
 import { Food } from "../models/Food";
 import { GenrateSignature, ValidatePassword } from "../utility";
 import { FindVendor } from "./AdminController";
-import { Multer } from "multer";
 import { Order }  from "../models/Order";
 import { Offer } from "../models/Offer";
+import multer from "multer";
 
 
 export const VendorLogin = async (req: Request, res: Response, next: NextFunction) => {
