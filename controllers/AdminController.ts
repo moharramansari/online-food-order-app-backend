@@ -1,10 +1,10 @@
 import { Request,Response, NextFunction } from "express";
-import { CreateVandorInput } from "../dto";
+import { CreateVendorInput } from "../dto";
 import { Vandor } from "../models";
 import { GenratePassword, GenrateSalt } from "../utility";
 
 
-export const FindVandor = async (id: string | undefined, email?: string) => {
+export const FindVendor = async (id: string | undefined, email?: string) => {
     if (email) {
         return await Vandor.findOne({email: email})
     } else {

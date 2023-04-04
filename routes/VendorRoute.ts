@@ -47,7 +47,7 @@ router.put('/offer/:id', EditOffer);
 router.get('/', (req: Request, res: Response, next: NextFunction) => {
 
     
-    res.json({message:"Hello from vandor"})
+    res.json({message:"Hello from vendor"})
 
 })
 

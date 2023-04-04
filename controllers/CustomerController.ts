@@ -1,7 +1,7 @@
 import express, { Request, Response, NextFunction } from 'express';
 import { validate } from 'class-validator'
 import { plainToClass } from 'class-transformer'
-import { CreateCustomerInputs, userLoginInputs, EditCustomerProfileInputs, OrderInputs } from '../dto/Customer.dto'
+import { CreateCustomerInputs, userLoginInputs, EditCustomerProfileInputs, OrderInputs, cartItems } from '../dto/Customer.dto'
 import { GenrateSalt, GenratePassword, GenerateOtp, GenrateSignature, ValidatePassword } from '../utility';
 import { Customer } from '../models/Customer';
 import { Food, Transaction } from '../models';
@@ -229,7 +229,7 @@ export const addToCart = async (req: Request, res: Response, next: NextFunction)
 
         let cartItems = Array();
 
-        const {_id, unit} = <OrderInputs>req.body;
+        const {_id, unit} = <cartItems>req.body;
 
         const food = await Food.findById(_id);
         
@@ -307,6 +307,18 @@ export const DeleteCart = async (req: Request, res: Response, next: NextFunction
 
 /** ------------------ Order Section -------------------- **/
 
+const validateTransaction = async (txnId: string) => {
+    
+    const currentTransaction = await Transaction.findById(txnId);
+    console.log("Current transaction", currentTransaction);
+    if (currentTransaction) {
+        if (currentTransaction.status.toLowerCase() !== "failed") {
+            return { status: true, currentTransaction }
+        }
+    }
+    return { status: false, currentTransaction }
+}
+
 export const CreateOrder = async (req: Request, res: Response, next: NextFunction) => {
     
     //grab current login customer
@@ -315,6 +327,13 @@ export const CreateOrder = async (req: Request, res: Response, next: NextFunctio
     const { txnId, amount, items } = <OrderInputs>req.body;
 
     if (customer) {
+
+        //validate the transaction 
+        const { status, currentTransaction } = await validateTransaction(txnId);
+        
+        if (!status) {
+            return res.status(404).json({ message: "Error with create order! " });
+        }
 
         //create an order ID
         const orderId = `${Math.floor(Math.random() * 89999) + 1000}`;
@@ -332,17 +351,20 @@ export const CreateOrder = async (req: Request, res: Response, next: NextFunctio
         let vandorId;
         
         //Calculate order amount
-        const foods = await Food.find().where('_id').in(cart.map(item => item._id)).exec();
+        const foods = await Food.find().where('_id').in(items.map(item => item._id)).exec();
+
         console.log('Foods in the foods',foods);
 
         foods.map(food => {
             
-            cart.map(({ _id, unit }) => {
+            items.map(({ _id, unit }) => {
                 
                 if (food._id == _id) {
                     vandorId = food.vandorId;
-                    netAmount += (food.price * unit);
+                    netAmount += food.price * unit;
                    cartItems.push({ food, unit }) // unit 1 and 2 i,e 
+                } else {
+                    console.log(`${food._id} / ${_id}`)
                 }
             })
         })
@@ -373,9 +395,7 @@ export const CreateOrder = async (req: Request, res: Response, next: NextFunctio
                 
                 if (profile != null) {
                     profile.cart = [] as any;
-                    const cartResult = await profile.save();
-                    
-                    return res.status(200).json(cartResult);
+                    profile.orders.push(currentOrder)
                 }
             }
         }
@@ -438,6 +458,8 @@ export const VerifyOffer = async (req: Request, res: Response, next: NextFunctio
         }
     }
 }
+
+/** ---------------------- Create Payment ------------------------**/
 
 export const CreatePayment = async (req: Request, res: Response, next: NextFunction) => {
 

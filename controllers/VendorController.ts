@@ -1,9 +1,9 @@
 import { Request, Response, NextFunction } from "express";
-import { CreateOfferInputs, EditVandorInputs, VandorLoginInputs } from "../dto";
+import { CreateOfferInputs, EditVendorInputs, VendorLoginInputs } from "../dto";
 import { createFoodInputs } from "../dto/Food.dto";
 import { Food } from "../models/Food";
 import { GenrateSignature, ValidatePassword } from "../utility";
-import { FindVandor } from "./AdminController";
+import { FindVendor } from "./AdminController";
 import { Multer } from "multer";
 import { Order }  from "../models/Order";
 import { Offer } from "../models/Offer";
@@ -11,20 +11,20 @@ import { Offer } from "../models/Offer";
 
 export const VandorLogin = async (req: Request, res: Response, next: NextFunction) => {
 
-    const { email, password } = <VandorLoginInputs>req.body;
+    const { email, password } = <VendorLoginInputs>req.body;
     
-    const existingVandor = await FindVandor('', email);
+    const existingVendor = await FindVendor('', email);
 
-    if (existingVandor !== null) {
+    if (existingVendor !== null) {
         //validation and given access
-        const validation = await ValidatePassword(password, existingVandor.password, existingVandor.salt);
+        const validation = await ValidatePassword(password, existingVendor.password, existingVendor.salt);
 
         if (validation) {
             const signature = GenrateSignature({
-                _id: existingVandor._id,
-                email: existingVandor.email,
-                foodTypes: existingVandor.foodType,
-                name : existingVandor.email
+                _id: existingVendor._id,
+                email: existingVendor.email,
+                foodTypes: existingVendor.foodType,
+                name : existingVendor.email
             })
             return res.json(signature)
         } else {
@@ -35,56 +35,56 @@ export const VandorLogin = async (req: Request, res: Response, next: NextFunctio
     return res.json({"message" : "Login cridential not valid"})
 }
 
-export const GetVandorProfile = async (req: Request, res: Response, next: NextFunction) => {    
+export const GetVendorProfile = async (req: Request, res: Response, next: NextFunction) => {    
     const user = req.user;
     if (user) {
-        const existingVandor = await FindVandor(user._id)
-        return res.json(existingVandor)
+        const existingVendor = await FindVendor(user._id)
+        return res.json(existingVendor)
     }
 
     return res.json({"message" : "Vandor information Not Found"})
 }
 
-export const UpdateVandorProfile = async (req: Request, res: Response, next: NextFunction) => { 
+export const UpdateVendorProfile = async (req: Request, res: Response, next: NextFunction) => { 
 
-    const { foodTypes, name, address, phone } = <EditVandorInputs>req.body;
+    const { foodTypes, name, address, phone } = <EditVendorInputs>req.body;
     
     const user = req.user;
 
     if (user) {
-        const existingVandor = await FindVandor(user._id)
+        const existingVendor = await FindVendor(user._id)
 
-        if (existingVandor !== null) {
-            existingVandor.name = name;
-            existingVandor.address = address;
-            existingVandor.phone = phone;
-            existingVandor.foodType = foodTypes
+        if (existingVendor !== null) {
+            existingVendor.name = name;
+            existingVendor.address = address;
+            existingVendor.phone = phone;
+            existingVendor.foodType = foodTypes
 
-            const savedResult = await existingVandor.save();
+            const savedResult = await existingVendor.save();
             return res.json(savedResult);
         }
 
-        return res.json(existingVandor)
+        return res.json(existingVendor)
     }
 
     return res.json({"message" : "Vandor information Not Found"})
 }
 
-export const UpdateVandorService = async (req: Request, res: Response, next: NextFunction) => { 
+export const UpdateVendorService = async (req: Request, res: Response, next: NextFunction) => { 
 
     const user = req.user;
 
     if (user) {
-        const existingVandor = await FindVandor(user._id)
+        const existingVendor = await FindVendor(user._id)
 
-        if (existingVandor !== null) {
-            existingVandor.serviceAvailble = !existingVandor.serviceAvailble
+        if (existingVendor !== null) {
+            existingVendor.serviceAvailble = !existingVendor.serviceAvailble
 
-            const savedResult = await existingVandor.save();
+            const savedResult = await existingVendor.save();
             return res.json(savedResult);
         }
 
-        return res.json(existingVandor)
+        return res.json(existingVendor)
     }
 
     return res.json({"message" : "Vandor information Not Found"})
@@ -99,16 +99,16 @@ export const AddFood = async (req: Request, res: Response, next: NextFunction) =
 
         const {name, description, category, foodType, readyTime, price} = <createFoodInputs>req.body;
 
-        const vandor = await FindVandor(user._id)
+        const vendor = await FindVendor(user._id)
 
-        if (vandor !== null) {
+        if (vendor !== null) {
 
             const files = req.files as [Express.Multer.File];
 
             const images = files.map((file: Express.Multer.File) => file.filename);
 
             const createFood = await Food.create({
-                vandorId: vandor._id,
+                vendorId: vendor._id,
                 name: name,
                 description: description,
                 category: category,
@@ -119,8 +119,8 @@ export const AddFood = async (req: Request, res: Response, next: NextFunction) =
                 rating : 0
             })
 
-            vandor.foods.push(createFood);
-            const result = await vandor.save();
+            vendor.foods.push(createFood);
+            const result = await vendor.save();
 
             return res.json(result)
         }
