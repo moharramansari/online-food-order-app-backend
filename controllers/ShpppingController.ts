@@ -1,12 +1,12 @@
 import express, {Request,Response, NextFunction} from 'express'
-import { Vandor, FoodDoc } from '../models';
+import { Vendor, FoodDoc } from '../models';
 import { Offer } from '../models/Offer';
 
 export const GetFoodAvailability = async (req: Request, res: Response, next: NextFunction) => {
 
     const pincode = req.params.pincode;
 
-    const result = await Vandor.find({ pincode: pincode, serviceAvailble: true })
+    const result = await Vendor.find({ pincode: pincode, serviceAvailble: true })
         .sort([['rating', 'descending']])
         .populate("foods")
     
@@ -21,7 +21,7 @@ export const GetTopRestaurants = async (req: Request, res: Response, next: NextF
 
     const pincode = req.params.pincode;
 
-    const result = await Vandor.find({ pincode: pincode, serviceAvailble: true })
+    const result = await Vendor.find({ pincode: pincode, serviceAvailble: true })
         .sort([['rating', 'descending']])
         .limit(10)
     
@@ -37,15 +37,15 @@ export const GetFoodsIn30Min = async (req: Request, res: Response, next: NextFun
 
     const pincode = req.params.pincode;
 
-    const result = await Vandor.find({ pincode: pincode, serviceAvailble: false })
+    const result = await Vendor.find({ pincode: pincode, serviceAvailble: false })
         .populate("foods")
     
     if (result.length > 0) {
 
         let foodResult: any = [];
 
-        result.map(vandor => {
-            const foods = vandor.foods as [FoodDoc]
+        result.map(vendor => {
+            const foods = vendor.foods as [FoodDoc]
 
             foodResult.push(...foods.filter(food => food.readyTime < 30));
         })
@@ -59,7 +59,7 @@ export const SearchFoods = async (req: Request, res: Response, next: NextFunctio
 
      const pincode = req.params.pincode;
 
-    const result = await Vandor.find({ pincode: pincode, serviceAvailble: false })
+    const result = await Vendor.find({ pincode: pincode, serviceAvailble: false })
         .populate("foods")
     
     if (result.length > 0) {
@@ -78,7 +78,7 @@ export const RestaurantById = async (req: Request, res: Response, next: NextFunc
     
     const id = req.params.id;
 
-    const result = await Vandor.findById(id).populate("foods");
+    const result = await Vendor.findById(id).populate("foods");
 
     if (result) {
         return res.status(200).json(result)

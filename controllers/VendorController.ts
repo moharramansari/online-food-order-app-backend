@@ -9,7 +9,7 @@ import { Order }  from "../models/Order";
 import { Offer } from "../models/Offer";
 
 
-export const VandorLogin = async (req: Request, res: Response, next: NextFunction) => {
+export const VendorLogin = async (req: Request, res: Response, next: NextFunction) => {
 
     const { email, password } = <VendorLoginInputs>req.body;
     
@@ -42,7 +42,7 @@ export const GetVendorProfile = async (req: Request, res: Response, next: NextFu
         return res.json(existingVendor)
     }
 
-    return res.json({"message" : "Vandor information Not Found"})
+    return res.json({"message" : "Vendor information Not Found"})
 }
 
 export const UpdateVendorProfile = async (req: Request, res: Response, next: NextFunction) => { 
@@ -67,7 +67,7 @@ export const UpdateVendorProfile = async (req: Request, res: Response, next: Nex
         return res.json(existingVendor)
     }
 
-    return res.json({"message" : "Vandor information Not Found"})
+    return res.json({"message" : "Vendor information Not Found"})
 }
 
 export const UpdateVendorService = async (req: Request, res: Response, next: NextFunction) => { 
@@ -87,7 +87,7 @@ export const UpdateVendorService = async (req: Request, res: Response, next: Nex
         return res.json(existingVendor)
     }
 
-    return res.json({"message" : "Vandor information Not Found"})
+    return res.json({"message" : "Vendor information Not Found"})
 }
 
 //TODO 
@@ -135,7 +135,7 @@ export const GetFoods = async (req: Request, res: Response, next: NextFunction) 
 
     if (user) {
 
-        const foods = await Food.find({vandorId : user._id})
+        const foods = await Food.find({vendorId : user._id})
 
         if (foods !== null) {
             return res.json(foods)
@@ -153,7 +153,7 @@ export const GetCurrentOrders = async (req: Request, res: Response, next: NextFu
 
     if (user) {
 
-        const orders = await Order.find({ vandorId: user._id }).populate('items.food');
+        const orders = await Order.find({ vendorId: user._id }).populate('items.food');
 
         if (orders != null) {
             return res.status(200).json(orders);
@@ -255,7 +255,7 @@ export const AddOffer = async (req: Request, res: Response, next: NextFunction) 
         const { title, description, offerType, offerAmount, pincode,
             promoCode, promoType, startValidity, endValidity, bank, bins, minValue, isActive } = <CreateOfferInputs>req.body;
         
-        const vendor = await FindVandor(user._id);
+        const vendor = await FindVendor(user._id);
 
         if (vendor) {
             
@@ -300,7 +300,7 @@ export const EditOffer = async (req: Request, res: Response, next: NextFunction)
                 const currentOffers = await Offer.findById(offerId);
 
                 if (currentOffers) {
-                    const vendor = await FindVandor(user._id);
+                    const vendor = await FindVendor(user._id);
 
                     if (vendor) {
                         currentOffers.title = title;

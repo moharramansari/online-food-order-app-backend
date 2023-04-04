@@ -47,6 +47,6 @@ const VandorSchema = new Schema({
     timestamps : true
 })
 
-    const Vandor = mongoose.model<VandorDoc>('vandor', VandorSchema)
+    const Vendor = mongoose.model<VandorDoc>('vendor', VandorSchema)
 
-    export {Vandor}
+    export {Vendor}
