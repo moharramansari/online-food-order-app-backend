@@ -3,7 +3,7 @@ import mongoose, {Schema, Document} from "mongoose";
 export interface TransactionDoc extends Document{
 
     customer: string;
-    vandorId: string;
+    vendorId: string;
     orderId: string;
     orderValue: number;
     offerUsed: string;

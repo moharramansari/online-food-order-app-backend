@@ -24,7 +24,7 @@ const OfferSchema = new Schema({
     offerType: { type: String, required: true },
     vendors: [
         {
-            type : Schema.Types.ObjectId, ref : 'vandor'
+            type : Schema.Types.ObjectId, ref : 'vendor'
         }
     ],
     title: { type: String, required: true },
