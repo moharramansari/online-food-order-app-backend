@@ -15,7 +15,7 @@ export interface TransactionDoc extends Document{
 
 const TransactionSchema = new Schema({
     customer: String,
-    vendorId: String,
+    vendorId : String,
     orderId: String,
     orderValue: Number,
     offerUsed: String,

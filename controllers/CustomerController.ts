@@ -363,7 +363,7 @@ export const CreateOrder = async (req: Request, res: Response, next: NextFunctio
                 if (food._id == _id) {
                     vendorId = food.vendorId;
                     netAmount += food.price * unit;
-                   cartItems.push({ food, unit }) // unit 1 and 2 i,e 
+                    cartItems.push({ food, unit: unit }) // unit 1 and 2 i,e 
                 } else {
                     console.log(`${food._id} / ${_id}`)
                 }
@@ -389,7 +389,7 @@ export const CreateOrder = async (req: Request, res: Response, next: NextFunctio
                 deliveryId: '',
                 appliedOffers: false,
                 offerId: null,
-                readyTime : 45
+                readyTime : 45 
             })
 
             if (currentOrder) {
@@ -400,11 +400,11 @@ export const CreateOrder = async (req: Request, res: Response, next: NextFunctio
                 }
             }
 
-            // if (currentTransaction) {
-            //     currentTransaction?.vendorId = vendorId;
-            //     currentTransaction?.orderId = orderId;
-            //     currentTransaction?.status = 'CONFIRMED';
-            // }
+          
+                currentTransaction.vendorId = vendorId;
+                currentTransaction.orderId = orderId;
+                currentTransaction.status = 'confirmed';
+         
         }
     
     //Finally update orders to user account
