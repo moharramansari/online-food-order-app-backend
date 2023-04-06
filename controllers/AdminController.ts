@@ -1,6 +1,6 @@
 import { Request,Response, NextFunction } from "express";
 import { CreateVendorInput } from "../dto";
-import { Vendor } from "../models";
+import { Transaction, Vendor } from "../models";
 import { GenratePassword, GenrateSalt } from "../utility";
 
 
@@ -67,4 +67,30 @@ export const GetVendorByID = async (req: Request, res: Response, next: NextFunct
     }
 
     return res.json({"message" : "Vendor data not available"})
+}
+
+export const GetTransaction = async (req: Request, res: Response, next: NextFunction) => {
+
+    const transactions = await Transaction.find();
+
+    if (transactions) {
+        return res.status(200).json(transactions)
+    }
+
+    return res.json({"message" : "Transaction not available"})
+
+}
+
+export const GetTransactionbyID = async (req: Request, res: Response, next: NextFunction) => {
+
+    const id = req.params.id;
+
+    const transactions = await Transaction.findById(id);
+
+    if (transactions) {
+        return res.status(200).json(transactions)
+    }
+
+    return res.json({"message" : "Transaction not available"})
+    
 }

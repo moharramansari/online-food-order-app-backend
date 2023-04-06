@@ -338,6 +338,7 @@ export const CreateOrder = async (req: Request, res: Response, next: NextFunctio
 
         //create an order ID
         const orderId = `${Math.floor(Math.random() * 89999) + 1000}`;
+        console.log("order id ---", orderId)
 
         const profile = await Customer.findById(customer._id);
 
@@ -381,14 +382,11 @@ export const CreateOrder = async (req: Request, res: Response, next: NextFunctio
                 vendorId : vendorId,
                 items: cartItems,
                 totalAmount: netAmount,
+                paidAmount: amount,
                 orderDate: new Date(),
-                paidThrough: 'COD',
-                paymentResponse: 'Some json response stringify',
                 orderStatus: 'Waiting',
                 remarks: '',
                 deliveryId: '',
-                appliedOffers: false,
-                offerId: null,
                 readyTime : 45 
             })
 
@@ -404,13 +402,17 @@ export const CreateOrder = async (req: Request, res: Response, next: NextFunctio
                 currentTransaction.vendorId = vendorId;
                 currentTransaction.orderId = orderId;
                 currentTransaction.status = 'confirmed';
-         
-        }
-    
-    //Finally update orders to user account
-    }
 
-    return res.status(400).json({ message: 'Error with create order' })
+            await currentTransaction.save();
+
+            const profileSaveResponse = await profile.save();
+
+            res.status(200).json(profileSaveResponse);
+         
+        } else {
+            return res.status(400).json({ message: 'Error with create order' })
+        }
+    }
 }
 
 export const GetOrders = async (req: Request, res: Response, next: NextFunction) => {
