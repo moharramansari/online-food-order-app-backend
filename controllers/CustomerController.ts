@@ -305,6 +305,25 @@ export const DeleteCart = async (req: Request, res: Response, next: NextFunction
 
 }
 
+/** ------------------ Delivery Notification  -------------------- **/
+
+export const assignOrderForDelivery = async (orderId:string, vendorId : string) => {
+
+    //find the vendor
+
+
+    //find the available delivery person
+
+
+    //check the nearest delivery person and assign the order
+
+
+    //update deliveryID
+}
+
+
+
+
 /** ------------------ Order Section -------------------- **/
 
 const validateTransaction = async (txnId: string) => {
@@ -404,6 +423,8 @@ export const CreateOrder = async (req: Request, res: Response, next: NextFunctio
                 currentTransaction.status = 'confirmed';
 
             await currentTransaction.save();
+
+            assignOrderForDelivery(currentOrder._id, vendorId);
 
             const profileSaveResponse = await profile.save();
 

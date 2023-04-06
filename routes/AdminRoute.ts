@@ -1,5 +1,5 @@
 import express, {Request, Response,NextFunction} from 'express'
-import { createVendor, GetTransaction, GetTransactionbyID, GetVendorByID, GetVendors, } from '../controllers'
+import { createVendor, GetTransactions, GetTransactionbyID, GetVendorByID, GetVendors, } from '../controllers'
 
 const router = express.Router()
 
@@ -9,7 +9,7 @@ router.get('/vendors', GetVendors)
 
 router.get('/vendor/:id', GetVendorByID)
 
-router.get('/transaction', GetTransaction)
+router.get('/transactions', GetTransactions)
 
 router.get('/transaction/:id', GetTransactionbyID)
 

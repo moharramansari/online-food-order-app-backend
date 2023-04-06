@@ -69,7 +69,7 @@ export const GetVendorByID = async (req: Request, res: Response, next: NextFunct
     return res.json({"message" : "Vendor data not available"})
 }
 
-export const GetTransaction = async (req: Request, res: Response, next: NextFunction) => {
+export const GetTransactions = async (req: Request, res: Response, next: NextFunction) => {
 
     const transactions = await Transaction.find();
 
