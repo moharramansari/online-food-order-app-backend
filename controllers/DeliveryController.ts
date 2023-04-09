@@ -164,7 +164,10 @@ export const UpdateDeliveryUserStatus = async (req: Request, res: Response, next
 
         if (profile) {
 
-            
+            if (lat & lng) {
+                profile.lat = profile.lat,
+                profile.lng = profile.lng
+            }
 
             profile.isAvailable = !profile.isAvailable;
 
