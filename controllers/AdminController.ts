@@ -117,3 +117,19 @@ export const VerifyDeliveryUser = async (req: Request, res: Response, next: Next
     return res.json({ "message": "Unable to verify Delivery User" });
 
 }
+
+export const GetDeliveryUsers = async (req: Request, res: Response, next: NextFunction) => { 
+
+   
+    const deliveryUsers = await DeliveryUser.find();
+    
+    if (deliveryUsers) {
+            
+            return res.status(200).json(deliveryUsers);
+
+        }
+
+
+    return res.json({ "message": "Unable to verify Delivery User" });
+
+}

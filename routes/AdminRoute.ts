@@ -1,5 +1,5 @@
 import express, {Request, Response,NextFunction} from 'express'
-import { createVendor, GetTransactions, GetTransactionbyID, GetVendorByID, GetVendors, VerifyDeliveryUser, } from '../controllers'
+import { createVendor, GetTransactions, GetTransactionbyID, GetVendorByID, GetVendors, VerifyDeliveryUser, GetDeliveryUsers, } from '../controllers'
 
 const router = express.Router()
 
@@ -14,6 +14,8 @@ router.get('/transactions', GetTransactions)
 router.get('/transaction/:id', GetTransactionbyID)
 
 router.put('/delivery/verify', VerifyDeliveryUser)
+
+router.get('/delivery/users', GetDeliveryUsers);
 
 
 
