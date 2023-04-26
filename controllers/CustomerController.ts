@@ -4,7 +4,7 @@ import { plainToClass } from 'class-transformer'
 import { CreateCustomerInputs, userLoginInputs, EditCustomerProfileInputs, OrderInputs, cartItems } from '../dto/Customer.dto'
 import { GenrateSalt, GenratePassword, GenerateOtp, GenrateSignature, ValidatePassword } from '../utility';
 import { Customer } from '../models/Customer';
-import { Food, Transaction } from '../models';
+import { Food, Transaction, Vendor } from '../models';
 import { Order } from '../models/Order';
 import { Offer } from '../models/Offer';
 
@@ -52,7 +52,7 @@ export const CustomerSignUp = async (req: Request, res: Response, next: NextFunc
 
         //send otp to the customer
         // await onRequestOTP(otp, phone)
-
+``
         //generate the signature
 
         const signature = GenrateSignature({
@@ -310,6 +310,13 @@ export const DeleteCart = async (req: Request, res: Response, next: NextFunction
 export const assignOrderForDelivery = async (orderId:string, vendorId : string) => {
 
     //find the vendor
+    const vendor = await Vendor.findById(vendorId);
+
+    if (vendor) {
+        const areaCode = vendor.pincode;
+        const vendorLat = vendor.lat;
+        const vendorLng = vendor.lng;
+    }
 
 
     //find the available delivery person
@@ -336,6 +343,7 @@ const validateTransaction = async (txnId: string) => {
         }
     }
     return { status: false, currentTransaction }
+    
 }
 
 export const CreateOrder = async (req: Request, res: Response, next: NextFunction) => {

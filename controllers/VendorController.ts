@@ -74,6 +74,8 @@ export const UpdateVendorService = async (req: Request, res: Response, next: Nex
 
     const user = req.user;
 
+    // const { lat, lng } = req.body;
+
     if (user) {
         const existingVendor = await FindVendor(user._id)
 
@@ -81,10 +83,10 @@ export const UpdateVendorService = async (req: Request, res: Response, next: Nex
             existingVendor.serviceAvailble = !existingVendor.serviceAvailble
 
             const savedResult = await existingVendor.save();
-            return res.json(savedResult);
+            return res.json(savedResult)
         }
 
-        return res.json(existingVendor)
+        return res.json(existingVendor);
     }
 
     return res.json({"message" : "Vendor information Not Found"})

@@ -25,8 +25,8 @@ const DeliveryUserSchema = new Schema({
     address: {type : String, required : true},
     phone: { type: String, required: true },
     verified: { type: Boolean, require: true },
-    lat: { type: Number },
-    lng: { type: Number },
+    lat: { type: Number, require: true },
+    lng: { type: Number, require: true },
     isAvailable: { type: Boolean }
 },
     {
