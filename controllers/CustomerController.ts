@@ -339,13 +339,8 @@ export const assignOrderForDelivery = async (orderId:string, vendorId : string) 
                 console.log(response);
                 //Notify to vendor for recieved New order using firebase push notification
             }
-
-
         }
     } 
-
-
-
     //update deliveryID
 }
 
