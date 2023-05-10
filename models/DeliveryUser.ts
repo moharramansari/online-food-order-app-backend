@@ -9,6 +9,7 @@ interface DeliveryUserDoc extends Document{
     lastName: string;
     address: string;
     phone: string;
+    pincode: string;
     verified: boolean;
     lat: number;
     lng: number;
@@ -16,13 +17,14 @@ interface DeliveryUserDoc extends Document{
 }
 
 const DeliveryUserSchema = new Schema({
-    email: {type : String, required : true},
-    password: {type : String, required : true},
-    salt: {type : String, required : true},
-    firstName: {type : String, required : true},
-    lastName:{type : String, required : true},
-    address: {type : String, required : true},
+    email: { type: String, required: true },
+    password: { type: String, required: true },
+    salt: { type: String, required: true },
+    firstName: { type: String, required: true },
+    lastName: { type: String, required: true },
+    address: { type: String, required: true },
     phone: { type: String, required: true },
+    pincode: {type: String, require: true},
     verified: { type: Boolean, require: true },
     lat: { type: Number, require: true },
     lng: { type: Number, require: true },

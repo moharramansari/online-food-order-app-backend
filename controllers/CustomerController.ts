@@ -4,7 +4,7 @@ import { plainToClass } from 'class-transformer'
 import { CreateCustomerInputs, userLoginInputs, EditCustomerProfileInputs, OrderInputs, cartItems } from '../dto/Customer.dto'
 import { GenrateSalt, GenratePassword, GenerateOtp, GenrateSignature, ValidatePassword } from '../utility';
 import { Customer } from '../models/Customer';
-import { Food, Transaction, Vendor } from '../models';
+import { DeliveryUser, Food, Transaction, Vendor } from '../models';
 import { Order } from '../models/Order';
 import { Offer } from '../models/Offer';
 
@@ -316,13 +316,34 @@ export const assignOrderForDelivery = async (orderId:string, vendorId : string) 
         const areaCode = vendor.pincode;
         const vendorLat = vendor.lat;
         const vendorLng = vendor.lng;
+
+
+        //find the available delivery person
+
+        const deliveryPerson = await DeliveryUser.find({ pincode: areaCode, verified: true, isAvailable: true });
+
+        if (deliveryPerson) {
+             //check the nearest delivery person and assign the order
+            
+            const currentOrder = await Order.findById(orderId);
+
+
+            if (currentOrder) {
+
+                console.log(`Delivery Person ${deliveryPerson[0]}`);
+                
+                //update delivery order
+                currentOrder.deliveryId = deliveryPerson[0].id;
+                const response = await currentOrder.save();
+
+                console.log(response);
+                //Notify to vendor for recieved New order using firebase push notification
+            }
+
+
+        }
     } 
 
-
-    //find the available delivery person
-
-
-    //check the nearest delivery person and assign the order
 
 
     //update deliveryID

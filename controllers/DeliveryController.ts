@@ -36,6 +36,7 @@ export const DeliveryUserSignUp = async (req: Request, res: Response, next: Next
         firstName: firstName,
         lastName: lastName,
         address: address,
+        pincode: pincode,
         verified: false,
         lat: 0,
         lng: 0,
