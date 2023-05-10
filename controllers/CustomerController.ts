@@ -316,7 +316,7 @@ export const assignOrderForDelivery = async (orderId:string, vendorId : string) 
         const areaCode = vendor.pincode;
         const vendorLat = vendor.lat;
         const vendorLng = vendor.lng;
-    }
+    } 
 
 
     //find the available delivery person

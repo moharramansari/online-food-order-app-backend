@@ -82,6 +82,11 @@ export const UpdateVendorService = async (req: Request, res: Response, next: Nex
         if (existingVendor !== null) {
             existingVendor.serviceAvailble = !existingVendor.serviceAvailble
 
+            if (lat && lng) {
+                existingVendor.lat = lat;
+                existingVendor.lng = lng;
+            }
+            
             const savedResult = await existingVendor.save();
             return res.json(savedResult)
         }
