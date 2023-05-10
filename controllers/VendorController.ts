@@ -74,7 +74,7 @@ export const UpdateVendorService = async (req: Request, res: Response, next: Nex
 
     const user = req.user;
 
-    // const { lat, lng } = req.body;
+    const { lat, lng } = req.body;
 
     if (user) {
         const existingVendor = await FindVendor(user._id)
